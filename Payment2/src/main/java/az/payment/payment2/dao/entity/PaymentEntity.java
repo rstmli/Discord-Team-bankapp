@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "payment")
+@Table(name = "payments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaymentEntity {
     @Id
@@ -19,6 +19,7 @@ public class PaymentEntity {
     Long id;
     String name;
     String surname;
+    @Column(unique = true,nullable = false)
     String accountNumber;
     BigDecimal balance;
 }

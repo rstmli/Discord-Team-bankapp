@@ -28,9 +28,9 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(value = BalanceEnoughFundsException.class)
+    @ExceptionHandler(value = BalanceEnoughFundsExceptions.class)
     @ResponseStatus(HttpStatus.SEE_OTHER)
-    public StatusResponse thereAreNotEnoughFunds(BalanceEnoughFundsException ex) {
+    public StatusResponse thereAreNotEnoughFunds(BalanceEnoughFundsExceptions ex) {
         return new StatusResponse(PaymentStatus.INSUFFICIENT_BALANCE, ex.getMessage());
     }
 
@@ -39,6 +39,15 @@ public class GlobalExceptionHandler {
     public StatusResponse NotFoundUser(UserNotFoundException ex) {
         return new StatusResponse(PaymentStatus.NOT_FOUND_USER, ex.getMessage());
     }
+    @ExceptionHandler(value = SelfTransferException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public StatusResponse SelfTransferExceptions(SelfTransferException exception){
+        return new StatusResponse(PaymentStatus.FAIL,exception.getMessage());
+    }
 
-
+    @ExceptionHandler(value = BalanceLimitExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public StatusResponse BalanceEnoughFundsExceptions(BalanceLimitExceededException e){
+        return new StatusResponse(PaymentStatus.FAIL,e.getMessage());
+    }
 }
