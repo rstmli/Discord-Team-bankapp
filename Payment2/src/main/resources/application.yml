@@ -5,12 +5,16 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: myuser
     password: 12345
-  spring:
-    rabbitmq:
-      host: 194.105.5.229
-      port: 5672
-      username: guest
-      password: guest
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   jpa:
     hibernate:
       ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
