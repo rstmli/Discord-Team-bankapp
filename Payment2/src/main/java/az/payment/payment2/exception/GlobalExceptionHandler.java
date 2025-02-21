@@ -39,6 +39,7 @@ public class GlobalExceptionHandler {
     public StatusResponse NotFoundUser(UserNotFoundException ex) {
         return new StatusResponse(PaymentStatus.NOT_FOUND_USER, ex.getMessage());
     }
+
     @ExceptionHandler(value = SelfTransferException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public StatusResponse SelfTransferExceptions(SelfTransferException exception){

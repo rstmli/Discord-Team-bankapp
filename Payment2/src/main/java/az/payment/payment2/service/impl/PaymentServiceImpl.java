@@ -5,11 +5,11 @@ import az.payment.payment2.dao.repository.PaymentRepository;
 import az.payment.payment2.dto.PaymentRequestDto;
 import az.payment.payment2.dto.TransferRequestDto;
 import az.payment.payment2.dto.StatusResponse;
-import az.payment.payment2.exception.BalanceEnoughFundsExceptions;
 import az.payment.payment2.exception.BalanceLimitExceededException;
 import az.payment.payment2.exception.SelfTransferException;
 import az.payment.payment2.exception.UserNotFoundException;
 import az.payment.payment2.mapper.PaymentMapper;
+import az.payment.payment2.queue.Producer;
 import az.payment.payment2.service.PaymentService;
 import az.payment.payment2.util.enums.PaymentStatus;
 import az.payment.payment2.util.helper.AccountNumberGenerator;
@@ -25,14 +25,15 @@ import org.springframework.stereotype.Service;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository repository;
     private final PaymentMapper mapper;
+    private final Producer producer;
     private final AccountNumberGenerator generator;
 
     @Override
     public void addUser(PaymentRequestDto dto) {
         boolean isSaved = false;
         int count = 0;
-        while (!isSaved){
-            try{
+        while (!isSaved) {
+            try {
                 ++count;
                 String accountNumber = generator.codeGenerator();
                 var entity = PaymentEntity.builder()
@@ -40,10 +41,12 @@ public class PaymentServiceImpl implements PaymentService {
                         .surname(dto.getSurname())
                         .accountNumber(accountNumber)
                         .balance(dto.getBalance()).build();
-                repository.save(entity);
+//                repository.save(entity);
+                producer.sendMessage(dto);
                 return;
-            }catch (DataIntegrityViolationException e){
-                if(count>=10){
+
+            } catch (DataIntegrityViolationException e) {
+                if (count >= 10) {
                     throw new UserNotFoundException("hesab yaradila bilmir destekle elaqeye kecin");
                 }
             }
@@ -65,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
                     receiverData.setBalance(receiverData.getBalance().add(requestDto.getBalance()));
                     repository.save(senderData);
                     repository.save(receiverData);
-                    return new StatusResponse(PaymentStatus.SUCCESS,null);
+                    return new StatusResponse(PaymentStatus.SUCCESS, null);
 
                 } else {
                     throw new BalanceLimitExceededException("balansinizda kifayet qeder vesait yoxdur");
@@ -77,5 +80,10 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             throw new UserNotFoundException("not found by AccountNumber");
         }
+    }
+
+    public StatusResponse rabbitMqExampleTest(PaymentRequestDto msg){
+        producer.sendMessage(msg);
+        return new StatusResponse(PaymentStatus.SUCCESS,"Halaldi");
     }
 }

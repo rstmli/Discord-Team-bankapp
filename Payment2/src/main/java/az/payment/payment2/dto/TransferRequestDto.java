@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
-
 @Component
 @Data
 @Builder

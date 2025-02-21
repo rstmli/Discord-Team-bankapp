@@ -9,5 +9,5 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface PaymentMapper {
-
+    PaymentEntity dtoToEntity(PaymentRequestDto dto);
 }

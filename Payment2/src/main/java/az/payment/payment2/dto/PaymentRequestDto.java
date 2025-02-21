@@ -1,7 +1,5 @@
 package az.payment.payment2.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -9,8 +7,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-
 @Component
 @Data
 @Builder
@@ -18,7 +16,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Validated
-public class PaymentRequestDto {
+public class PaymentRequestDto implements Serializable {
+    private static final long serialVersionUID = 42L;
     @Size(max = 255,message = "enter max 255 symbol")
     String name;
     String surname;
