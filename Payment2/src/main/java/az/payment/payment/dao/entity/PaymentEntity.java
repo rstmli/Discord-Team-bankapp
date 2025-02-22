@@ -1,10 +1,12 @@
 package az.payment.payment.dao.entity;
 
+import az.payment.payment.util.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,4 +24,8 @@ public class PaymentEntity {
     @Column(unique = true,nullable = false)
     String accountNumber;
     BigDecimal balance;
+    @Builder.Default
+    Integer transferRequestCount = 0;
+    LocalDateTime blockTime;
+    PaymentStatus status;
 }

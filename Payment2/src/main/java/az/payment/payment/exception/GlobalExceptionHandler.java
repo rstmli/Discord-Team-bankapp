@@ -59,4 +59,11 @@ public class GlobalExceptionHandler {
     public RedisStatusResponse keyNotFoundExceptionHandler(KeyNotFoundException e){
         return new RedisStatusResponse(RedisStatus.FAIL,e.getMessage());
     }
+    // BlockAccountException
+    @ExceptionHandler(value = BlockAccountException.class)
+    @ResponseStatus(HttpStatus.LOCKED)
+    public StatusResponse accountBlockExceptionHandler(BlockAccountException e){
+        return new StatusResponse(PaymentStatus.BLOCK,e.getMessage());
+    }
+
 }
