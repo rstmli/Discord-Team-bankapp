@@ -21,7 +21,7 @@ public class PaymentController {
     }
 
     @PostMapping("/transfer-balance")
-    public StatusResponse paymentTransfer(@RequestBody TransferRequestDto dto) {
+    public StatusResponse paymentTransfer(@Valid @RequestBody TransferRequestDto dto) {
         return service.transferBalance(dto);
     }
 

@@ -16,20 +16,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository repository;
     private final AccountNumberGenerator generator;
+    private Integer count = 0;
 
     @Override
     public void addUser(PaymentRequestDto dto) {
-        boolean isSaved = false;
-        int count = 0;
 
-        while (!isSaved) {
+        while (true) {
 
             try {
                 ++count;
@@ -44,7 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             } catch (DataIntegrityViolationException e) {
 
-                if (count >= 10) {
+                if (count >= 3) {
                     throw new UserNotFoundException("hesab yaradila bilmir destekle elaqeye kecin");
                 }
             }
